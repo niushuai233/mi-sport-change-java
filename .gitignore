@@ -33,4 +33,4 @@ build/
 .vscode/
 
 
-test/*
+src/test/*
