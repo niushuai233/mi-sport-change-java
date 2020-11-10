@@ -5,6 +5,7 @@ import cc.niushuai.misportchange.stepchange.biz.MiStepBiz;
 import cc.niushuai.misportchange.stepchange.service.StepChangeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 
@@ -18,6 +19,10 @@ public class StepChangeServiceImpl implements StepChangeService {
 
     @Resource
     private MiStepBiz miStepBiz;
+
+    public void setMiStepBizBean(MiStepBiz miStepBiz) {
+        this.miStepBiz = miStepBiz;
+    }
 
     @Override
     public String change(MiUser user) throws Exception {

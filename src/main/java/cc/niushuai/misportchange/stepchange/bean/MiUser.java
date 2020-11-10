@@ -1,5 +1,6 @@
 package cc.niushuai.misportchange.stepchange.bean;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -20,4 +21,12 @@ public class MiUser {
     @NotNull(message = "请输入要修改的步数")
     private Long step;
     private Long timeStamp;
+
+    public boolean isEmpty() {
+
+        if (StrUtil.isNotEmpty(username) && StrUtil.isNotEmpty(password) && StrUtil.isNotEmpty(step+"") && StrUtil.isNotEmpty(stepType)) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -50,6 +50,10 @@ public class MiStepBiz {
     @Resource
     private RestTemplate restTemplate;
 
+    public void setRestTemplateBean(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     public static void main(String[] args) {
         RestTemplate x = new RestTemplateConfig().restTemplate();
         MiStepBiz miStepBiz = new MiStepBiz();
