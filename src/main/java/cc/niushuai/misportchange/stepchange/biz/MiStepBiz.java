@@ -8,6 +8,7 @@ import cc.niushuai.misportchange.stepchange.bean.MiUser;
 import cc.niushuai.misportchange.stepchange.bean.Result;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
@@ -15,6 +16,7 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.codec.EncodingException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -28,11 +30,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.net.URLDecoder;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -97,7 +98,6 @@ public class MiStepBiz {
      **/
     public String miChange(MiUser miUser) throws Exception {
 
-
         // 1、获取access_code
         log.info("1、获取access_code");
         String code = getCode(miUser);
@@ -105,26 +105,27 @@ public class MiStepBiz {
 
         // 2、执行登陆
         log.info("2、执行登陆, 获取token");
-        String[] userInfo = login(code);
-        log.info("user_id = {}", userInfo[0]);
-        log.info("token = {}", userInfo[1]);
+        String[] loginRes = login(code);
+        log.info("user_id = {}", loginRes[0]);
+        log.info("login_token = {}", loginRes[1]);
+        log.info("app_token = {}", loginRes[2]);
 
         // 3、获取app_token
-        log.info("3、获取app_token");
-        String appToken = getAppToken(userInfo[1]);
-        log.info("appToken = {}", appToken);
+        // log.info("3、获取app_token");
+        // String appToken = getAppToken(userInfo[1]);
+        // log.info("appToken = {}", appToken);
 
         // 4、获取淘宝的时间戳
         log.info("4、获取淘宝的时间戳");
-        Long timestamp = getTime();
-        log.info("timestamp = {}", timestamp);
+        Long currendSecond = getTime();
+        log.info("currendSecond = {}", currendSecond);
 
         // 5、修改步数
         log.info("5、修改步数");
-        return doChange(miUser, userInfo[0], miUser.getStep(), appToken, timestamp);
+        return doChange(miUser, loginRes, miUser.getStep(), currendSecond);
     }
 
-    private String doChange(MiUser miUser, String userId, Long step, String appToken, Long timestamp) {
+    private String doChange(MiUser miUser, String[] loginRes, Long step, Long currentSecond) throws Exception {
 
         InputStream inputStream = this.getClass().getResourceAsStream("/data_json.txt");
 
@@ -132,21 +133,31 @@ public class MiStepBiz {
         IoUtil.readUtf8Lines(inputStream, lines);
 
         String dataJson = lines.get(0);
-        dataJson += DateUtil.format(new Date(), "yyyy-MM-dd") + "\"}]";
 
-        dataJson = dataJson.replace("${step}", step + "").replace("${did}", "DA932FFFFE8816E7");
+        dataJson = dataJson.replace("${datetime}", DateUtil.today())
+                        .replace("${step}", step + "");
+
+        dataJson = URLDecoder.decode(dataJson, "UTF-8");
 
         // ==========================================================================================================
 
-        HttpRequest post = HttpUtil.createPost(UrlConstant.BAND_DATA_JSON_URL + System.currentTimeMillis());
-        post.header("User-Agent", USER_AGENT);
-        post.header("apptoken", appToken);
+        HttpRequest post = HttpUtil.createPost(UrlConstant.BAND_DATA_JSON_URL + currentSecond);
+        post.header("Content-Type", "application/x-www-form-urlencoded");
+        post.header("apptoken", loginRes[2]);
 
-        post.form("data_json", dataJson);
-        post.form("userid", userId);
+        post.form("userid", loginRes[0]);
+        post.form("last_sync_data_time", currentSecond - RandomUtil.randomLong(12 * 60 * 60L, 24 * 60 * 60L));
         post.form("device_type", "0");
-        post.form("last_sync_data_time", "1589917081");
         post.form("last_deviceid", "DA932FFFFE8816E7");
+        post.form("data_json", dataJson);
+
+        log.info("//======================================================================================================================================");
+        Map<String, Object> form = post.form();
+        for (String key : form.keySet()) {
+            Object val = form.get(key);
+            log.info("form data| key = {}, val = {}", key, val);
+        }
+        log.info("//======================================================================================================================================");
 
         HttpResponse execute = post.execute();
 
@@ -188,29 +199,29 @@ public class MiStepBiz {
 //        return null;
     }
 
-    private String getAppToken(String loginToken) throws Exception {
-
-        HttpHeaders httpHeaders = RestTemplateUtil.addHeader(null, "User-Agent", USER_AGENT);
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(null, httpHeaders);
-        ResponseEntity<Result> responseEntity = restTemplate.exchange(UrlConstant.APP_TOKEN_URL.replace("{loginToken}", loginToken), HttpMethod.GET, requestEntity, Result.class);
-
-        Result appTokenR = responseEntity.getBody();
-
-        log.info("appTokenR: {}", appTokenR);
-        String appTokenInfo = appTokenR.get("token_info") + "";
-
-        if (StrUtil.isEmpty(appTokenInfo)) {
-            throw new BizException(50004, "获取app_token失败, 请检查账户名或密码是否正确");
-        }
-
-        // = 替换为 : 便于格式化
-        String replace = appTokenInfo.replace("=", ":");
-        JSONObject appTokenJson = JSONUtil.parseObj(replace);
-        log.info("app_token: {}", appTokenJson.getStr("app_token"));
-
-        return appTokenJson.getStr("app_token");
-    }
+    // private String getAppToken(String loginToken) throws Exception {
+    //
+    //     HttpHeaders httpHeaders = RestTemplateUtil.addHeader(null, "User-Agent", USER_AGENT);
+    //
+    //     HttpEntity<String> requestEntity = new HttpEntity<>(null, httpHeaders);
+    //     ResponseEntity<Result> responseEntity = restTemplate.exchange(UrlConstant.APP_TOKEN_URL.replace("{loginToken}", loginToken), HttpMethod.GET, requestEntity, Result.class);
+    //
+    //     Result appTokenR = responseEntity.getBody();
+    //
+    //     log.info("appTokenR: {}", appTokenR);
+    //     String appTokenInfo = appTokenR.get("token_info") + "";
+    //
+    //     if (StrUtil.isEmpty(appTokenInfo)) {
+    //         throw new BizException(50004, "获取app_token失败, 请检查账户名或密码是否正确");
+    //     }
+    //
+    //     // = 替换为 : 便于格式化
+    //     String replace = appTokenInfo.replace("=", ":");
+    //     JSONObject appTokenJson = JSONUtil.parseObj(replace);
+    //     log.info("app_token: {}", appTokenJson.getStr("app_token"));
+    //
+    //     return appTokenJson.getStr("app_token");
+    // }
 
     private String[] login(String code) throws Exception {
 
@@ -244,7 +255,7 @@ public class MiStepBiz {
         JSONObject tokenJson = JSONUtil.parseObj(replace);
         log.info("login_token: {}", tokenJson.getStr("login_token"));
 
-        return new String[]{tokenJson.getStr("user_id"), tokenJson.getStr("login_token")};
+        return new String[]{tokenJson.getStr("user_id"), tokenJson.getStr("login_token"), tokenJson.getStr("app_token")};
     }
 
     private String getCode(MiUser miUser) throws Exception {
@@ -287,10 +298,10 @@ public class MiStepBiz {
 
         try {
             Result r = restTemplate.getForObject(UrlConstant.GET_TIME_URL, Result.class);
-            return JSONUtil.parseObj(r.get("data")).getLong("t");
+            return JSONUtil.parseObj(r.get("data")).getLong("t") / 1000;
         } catch (RestClientException e) {
             e.printStackTrace();
-            return System.currentTimeMillis();
+            return System.currentTimeMillis() / 1000;
         }
     }
 }
