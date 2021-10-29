@@ -1,4 +1,4 @@
-package cc.niushuai.misportchange.common.config;
+package cc.niushuai.projects.misportchange.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

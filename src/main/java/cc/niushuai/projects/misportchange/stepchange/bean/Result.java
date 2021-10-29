@@ -1,4 +1,4 @@
-package cc.niushuai.misportchange.stepchange.bean;
+package cc.niushuai.projects.misportchange.stepchange.bean;
 
 import java.util.HashMap;
 import java.util.Map;

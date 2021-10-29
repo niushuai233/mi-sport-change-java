@@ -1,11 +1,11 @@
-package cc.niushuai.misportchange.stepchange.biz;
+package cc.niushuai.projects.misportchange.stepchange.biz;
 
-import cc.niushuai.misportchange.common.config.RestTemplateConfig;
-import cc.niushuai.misportchange.common.exception.BizException;
-import cc.niushuai.misportchange.common.util.RestTemplateUtil;
-import cc.niushuai.misportchange.common.util.UrlConstant;
-import cc.niushuai.misportchange.stepchange.bean.MiUser;
-import cc.niushuai.misportchange.stepchange.bean.Result;
+import cc.niushuai.projects.misportchange.common.config.RestTemplateConfig;
+import cc.niushuai.projects.misportchange.common.exception.BizException;
+import cc.niushuai.projects.misportchange.common.util.RestTemplateUtil;
+import cc.niushuai.projects.misportchange.common.util.UrlConstant;
+import cc.niushuai.projects.misportchange.stepchange.bean.MiUser;
+import cc.niushuai.projects.misportchange.stepchange.bean.Result;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -16,11 +16,8 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.codec.EncodingException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,7 +27,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.*;

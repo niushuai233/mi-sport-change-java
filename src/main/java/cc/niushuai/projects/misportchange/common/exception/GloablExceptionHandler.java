@@ -1,6 +1,6 @@
-package cc.niushuai.misportchange.common.exception;
+package cc.niushuai.projects.misportchange.common.exception;
 
-import cc.niushuai.misportchange.stepchange.bean.Result;
+import cc.niushuai.projects.misportchange.stepchange.bean.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

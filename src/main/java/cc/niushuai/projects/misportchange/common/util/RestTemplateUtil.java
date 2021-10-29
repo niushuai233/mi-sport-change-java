@@ -1,6 +1,6 @@
-package cc.niushuai.misportchange.common.util;
+package cc.niushuai.projects.misportchange.common.util;
 
-import cc.niushuai.misportchange.stepchange.bean.Result;
+import cc.niushuai.projects.misportchange.stepchange.bean.Result;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

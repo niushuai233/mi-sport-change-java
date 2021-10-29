@@ -1,8 +1,8 @@
-package cc.niushuai.misportchange.stepchange.controller;
+package cc.niushuai.projects.misportchange.stepchange.controller;
 
-import cc.niushuai.misportchange.stepchange.bean.MiUser;
-import cc.niushuai.misportchange.stepchange.bean.Result;
-import cc.niushuai.misportchange.stepchange.service.StepChangeService;
+import cc.niushuai.projects.misportchange.stepchange.bean.MiUser;
+import cc.niushuai.projects.misportchange.stepchange.bean.Result;
+import cc.niushuai.projects.misportchange.stepchange.service.StepChangeService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

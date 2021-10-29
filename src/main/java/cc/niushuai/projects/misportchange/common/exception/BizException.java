@@ -1,4 +1,4 @@
-package cc.niushuai.misportchange.common.exception;
+package cc.niushuai.projects.misportchange.common.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

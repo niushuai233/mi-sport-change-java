@@ -1,4 +1,4 @@
-package cc.niushuai.misportchange.common.util;
+package cc.niushuai.projects.misportchange.common.util;
 
 /**
  * @author ns
