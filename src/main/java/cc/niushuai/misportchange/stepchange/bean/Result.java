@@ -3,47 +3,47 @@ package cc.niushuai.misportchange.stepchange.bean;
 import java.util.HashMap;
 import java.util.Map;
 
-public class R extends HashMap<String, Object> {
+public class Result extends HashMap<String, Object> {
 
     private static final long serialVersionUID = -1131681874214638255L;
 
-    public R() {
+    public Result() {
         this.put("code", 200);
         this.put("msg", "success");
     }
 
-    public static R error(int code, String msg) {
-        R r = new R();
+    public static Result error(int code, String msg) {
+        Result r = new Result();
         r.put("code", code);
         r.put("msg", msg);
         return r;
     }
 
-    public static R ok(int code, String msg) {
-        R r = new R();
+    public static Result ok(int code, String msg) {
+        Result r = new Result();
         r.put("code", code);
         r.put("msg", msg);
         return r;
     }
 
-    public static R ok(String msg) {
-        R r = new R();
+    public static Result ok(String msg) {
+        Result r = new Result();
         r.put("msg", msg);
         return r;
     }
 
-    public static R ok(Map<String, Object> map) {
-        R r = new R();
+    public static Result ok(Map<String, Object> map) {
+        Result r = new Result();
         r.putAll(map);
         return r;
     }
 
-    public static R ok() {
-        return new R();
+    public static Result ok() {
+        return new Result();
     }
 
     @Override
-    public R put(String key, Object value) {
+    public Result put(String key, Object value) {
         super.put(key, value);
         return this;
     }

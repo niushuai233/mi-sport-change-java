@@ -1,7 +1,7 @@
 package cc.niushuai.misportchange.stepchange.controller;
 
 import cc.niushuai.misportchange.stepchange.bean.MiUser;
-import cc.niushuai.misportchange.stepchange.bean.R;
+import cc.niushuai.misportchange.stepchange.bean.Result;
 import cc.niushuai.misportchange.stepchange.service.StepChangeService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,14 +23,14 @@ public class StepChangeController {
     private StepChangeService stepChangeService;
 
     @PostMapping("/change")
-    public R change(@RequestBody @Valid MiUser user) throws Exception {
+    public Result change(@RequestBody @Valid MiUser user) throws Exception {
 
         if (null == user.getTimeStamp()) {
-            return R.ok();
+            return Result.ok();
         }
 
         String res = stepChangeService.change(user);
 
-        return R.ok();
+        return Result.ok();
     }
 }

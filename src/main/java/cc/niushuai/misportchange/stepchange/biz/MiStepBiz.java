@@ -5,7 +5,7 @@ import cc.niushuai.misportchange.common.exception.BizException;
 import cc.niushuai.misportchange.common.util.RestTemplateUtil;
 import cc.niushuai.misportchange.common.util.UrlConstant;
 import cc.niushuai.misportchange.stepchange.bean.MiUser;
-import cc.niushuai.misportchange.stepchange.bean.R;
+import cc.niushuai.misportchange.stepchange.bean.Result;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
@@ -193,9 +193,9 @@ public class MiStepBiz {
         HttpHeaders httpHeaders = RestTemplateUtil.addHeader(null, "User-Agent", USER_AGENT);
 
         HttpEntity<String> requestEntity = new HttpEntity<>(null, httpHeaders);
-        ResponseEntity<R> responseEntity = restTemplate.exchange(UrlConstant.APP_TOKEN_URL.replace("{loginToken}", loginToken), HttpMethod.GET, requestEntity, R.class);
+        ResponseEntity<Result> responseEntity = restTemplate.exchange(UrlConstant.APP_TOKEN_URL.replace("{loginToken}", loginToken), HttpMethod.GET, requestEntity, Result.class);
 
-        R appTokenR = responseEntity.getBody();
+        Result appTokenR = responseEntity.getBody();
 
         log.info("appTokenR: {}", appTokenR);
         String appTokenInfo = appTokenR.get("token_info") + "";
@@ -230,7 +230,7 @@ public class MiStepBiz {
 
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<MultiValueMap<String, String>>(map, httpHeaders);
 
-        R loginR = restTemplate.postForObject(UrlConstant.LOGIN_URL, httpEntity, R.class);
+        Result loginR = restTemplate.postForObject(UrlConstant.LOGIN_URL, httpEntity, Result.class);
 
         log.info("loginR: {}", loginR);
         String tokenInfo = loginR.get("token_info") + "";
@@ -286,7 +286,7 @@ public class MiStepBiz {
     private Long getTime() {
 
         try {
-            R r = restTemplate.getForObject(UrlConstant.GET_TIME_URL, R.class);
+            Result r = restTemplate.getForObject(UrlConstant.GET_TIME_URL, Result.class);
             return JSONUtil.parseObj(r.get("data")).getLong("t");
         } catch (RestClientException e) {
             e.printStackTrace();

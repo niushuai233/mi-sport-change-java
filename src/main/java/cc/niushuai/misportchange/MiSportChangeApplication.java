@@ -72,8 +72,8 @@ public class MiSportChangeApplication {
     private static void endApplication() {
         System.err.println("参数不合法, 请检查");
         System.out.println("usage: ");
-        System.out.println("    单机运行一次: java -jar mi-sport-change.jar --run=single --user=[账号] --password=[密码] --step=[要修改的步数]");
-        System.out.println("    Web 服务运行: java -jar mi-sport-change.jar --run=web");
+        System.out.println("    单机运行一次: java -jar mi-sport-change-java.jar --run=single --user=[账号] --password=[密码] --step=[要修改的步数]");
+        System.out.println("    Web 服务运行: java -jar mi-sport-change-java.jar --run=web");
         System.exit(0);
     }
 }

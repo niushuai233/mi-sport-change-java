@@ -1,6 +1,6 @@
 package cc.niushuai.misportchange.common.util;
 
-import cc.niushuai.misportchange.stepchange.bean.R;
+import cc.niushuai.misportchange.stepchange.bean.Result;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class RestTemplateUtil {
     @Resource
     private RestTemplate restTemplate;
 
-    public static <T> R postWithR(String url, T param, HttpHeaders httpHeaders) {
+    public static <T> Result postWithR(String url, T param, HttpHeaders httpHeaders) {
 
         String paramString = JSONUtil.toJsonStr(param);
 
@@ -34,7 +34,7 @@ public class RestTemplateUtil {
 
         log.info("rest send url: {}, paramString: {} result: {}", url, paramString, resp);
 
-        return JSONUtil.toBean(resp, R.class);
+        return JSONUtil.toBean(resp, Result.class);
     }
 
     public static <T> String postWithString(String url, T param, HttpHeaders httpHeaders) {
