@@ -26,11 +26,11 @@ public class StepChangeController {
     public Result change(@RequestBody @Valid MiUser user) throws Exception {
 
         if (null == user.getTimeStamp()) {
-            return Result.ok();
+            return Result.ok("修改成功<1^1>");
         }
 
         String res = stepChangeService.change(user);
 
-        return Result.ok();
+        return Result.ok(res);
     }
 }

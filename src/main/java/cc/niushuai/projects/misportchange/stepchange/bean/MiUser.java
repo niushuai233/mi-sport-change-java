@@ -3,6 +3,8 @@ package cc.niushuai.projects.misportchange.stepchange.bean;
 import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -19,6 +21,7 @@ public class MiUser {
     @NotNull(message = "请选择运动类型")
     private String stepType;
     @NotNull(message = "请输入要修改的步数")
+    @Max(value = 49999L, message = "最大不建议超过49999")
     private Long step;
     private Long timeStamp;
 

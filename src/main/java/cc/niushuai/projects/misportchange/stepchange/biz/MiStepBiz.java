@@ -162,7 +162,7 @@ public class MiStepBiz {
         JSONObject finalResult = JSONUtil.parseObj(execute.body());
         if (finalResult.getStr("code").equals("1") && finalResult.getStr("message").equalsIgnoreCase("success")) {
             log.info("用户: {}, 修改步数为: {}, 成功", miUser.getUsername(), miUser.getStep());
-            return "";
+            return "修改成功";
         }
 
         log.info("用户: {}, 修改步数为: {}, 失败: {}", miUser.getUsername(), miUser.getStep(), execute.body());
@@ -283,7 +283,7 @@ public class MiStepBiz {
         String[] split = query.split("&");
         List<String> access = Arrays.stream(split).filter(key -> key.contains("access=")).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(access)) {
-            throw new BizException(50002, "获取access_code失败, 请检查账户或密码是否正确");
+            throw new BizException(50002, "账户或密码错误");
         }
 
         return access.get(0).split("=")[1];
